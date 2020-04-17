@@ -1,0 +1,63 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimpleRDPManager"
+         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="SimpleRDPManager" Height="600" Width="350"
+        Loaded="Window_Loaded" Unloaded="Window_Unloaded" Icon="if_computer_connection_1421640.ico" ResizeMode="CanMinimize">
+    <Window.Resources>
+        <HierarchicalDataTemplate DataType="{x:Type local:ConnectionGroup}" ItemsSource="{Binding Connections}">
+            <TextBlock Text="{Binding Name}"></TextBlock>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type local:Connection}">
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} [{1} - {2}]">
+                        <MultiBinding.Bindings>
+                            <Binding Path="Name"/>
+                            <Binding Path="Server"/>
+                            <Binding Path="Login"/>
+                        </MultiBinding.Bindings>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </HierarchicalDataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <ToolBar>
+            <Button Click="Connect">Go</Button>
+            <Button Click="AddGroup">G+</Button>
+            <Button Click="DeleteGroup">G-</Button>
+            <Button Click="AddConnection">C+</Button>
+            <Button Click="RemoveConnection">C-</Button>
+            <Button Click="Window_Unloaded">Save</Button>
+        </ToolBar>
+        <TreeView Grid.Row="1" Name="tree" MouseDoubleClick="tree_MouseDoubleClick" SelectedItemChanged="tree_SelectedItemChanged"/>
+        <!--<WindowsFormsHost Grid.Row="2" Name="wHost" Height="150">
+            <WindowsFormsHost.Child>
+                <wf:PropertyGrid ToolbarVisible="False" HelpVisible="False" PropertySort="NoSort"/>
+            </WindowsFormsHost.Child>
+        </WindowsFormsHost>-->
+        <xctk:PropertyGrid x:Name="_propertyGrid" Grid.Row="2" Height="250"
+                                     AutoGenerateProperties="true" 
+                           SelectedObject="{Binding ElementName=tree, Path=SelectedItem}"
+                           ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False" ShowSortOptions="False" ShowSummary="False" ShowTitle="False"
+                           >
+        </xctk:PropertyGrid>
+        <StatusBar Grid.Row="3">
+            <StatusBarItem>
+                <TextBlock Name="txtVersion"></TextBlock></StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
